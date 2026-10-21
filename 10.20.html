@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Jacky House</title>
+  <!-- 引入轻量级五彩纸屑动画库 -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
   <style>
     :root {
       --primary: #21926c;
@@ -42,11 +44,25 @@
       overflow: hidden;
     }
 
-    /* 顶部标题区 */
+    /* 顶部标题区：改为大封面 Banner 模式 */
     .header {
-      background: linear-gradient(135deg, #5591f2 0%, #1d4ed8 100%);
+      background: linear-gradient(rgba(15, 23, 42, 0.2), rgba(15, 23, 42, 0.75)),
+                  url("photo_2026-10-21_20-48-01.jpg");
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
       color: #ffffff;
-      padding: 22px 28px 24px;
+      
+      /* 核心 1：强制设定大高度（240px 会比原来高出一倍多） */
+      min-height: 300px; 
+      
+      /* 核心 2：开启弹性布局，把文字内容沉到封面底部，上方留出大片视野展示背景 */
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      
+      /* 底部留出 24px，左右 28px */
+      padding: 24px 28px;
       text-align: left;
     }
 
@@ -55,52 +71,97 @@
       font-weight: 700;
       margin-bottom: 6px;
       letter-spacing: -0.2px;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     }
 
     .header p {
       font-size: 13px;
       color: rgba(255, 255, 255, 0.88);
-    }
-
-    /* 天气卡片样式 */
-    .weather-bar {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      margin-top: 14px;
-      padding: 6px 14px;
-      background: rgba(255, 255, 255, 0.18);
-      backdrop-filter: blur(8px);
-      border-radius: 20px;
-      font-size: 13px;
-      color: #ffffff;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-    }
-
-    .weather-icon {
-      font-size: 16px;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
     }
 
     .content {
       padding: 28px;
+    /* ================= 社交媒体图标栏样式 ================= */
+    .social-bar {
+      display: flex;
+      align-items: center;
+      gap: 12px;           /* 图标之间的间距 */
+      margin-bottom: 20px; /* 与下方签到栏的距离 */
     }
 
-    /* 签到模块样式 */
-    .checkin-box {
-      display: flex;
-      justify-content: space-between;
+    .social-btn {
+      display: inline-flex;
       align-items: center;
+      justify-content: center;
+      width: 42px;
+      height: 42px;
+      border-radius: 10px;
       background-color: var(--bg-color);
       border: 1px solid var(--border-color);
-      border-radius: 12px;
-      padding: 16px 20px;
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: all 0.25s ease;
+    }
+
+    .social-icon {
+      width: 20px;
+      height: 20px;
+      fill: currentColor; /* 图标填充色随字体颜色自动变化 */
+      transition: fill 0.2s ease;
+    }
+
+    /* 鼠标悬停时的浮起动效与品牌色变换 */
+    .social-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+
+    .social-btn.btn-youtube:hover {
+      color: #ff0000;
+      border-color: rgba(255, 0, 0, 0.3);
+      background-color: #fff5f5;
+    }
+
+    .social-btn.btn-facebook:hover {
+      color: #1877f2;
+      border-color: rgba(24, 119, 242, 0.3);
+      background-color: #f0f7ff;
+    }
+
+    .social-btn.btn-instagram:hover {
+      color: #e1306c;
+      border-color: rgba(225, 48, 108, 0.3);
+      background-color: #fdf2f6;
+    }
+
+    .social-btn.btn-x:hover {
+      color: #000000;
+      border-color: rgba(0, 0, 0, 0.3);
+      background-color: #f4f4f5;
+    }
+
+    /* ================= 签到与天气并排网格 ================= */
+    .widget-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
       margin-bottom: 24px;
     }
 
-    .checkin-info {
+    /* 左右两张卡片的通用基础样式 */
+    .widget-card {
+      background-color: var(--bg-color);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
       text-align: left;
     }
 
+    /* 左侧签到卡片样式 */
     .checkin-title {
       font-size: 15px;
       font-weight: 600;
@@ -108,9 +169,9 @@
     }
 
     .checkin-status {
-      font-size: 13px;
+      font-size: 12px;
       color: var(--text-muted);
-      margin-top: 2px;
+      margin-top: 4px;
     }
 
     .btn {
@@ -139,6 +200,44 @@
       transform: none;
     }
 
+    .checkin-card .btn {
+      width: 100%;
+      margin-top: 14px;
+      padding: 8px 12px;
+    }
+
+    /* 右侧天气卡片样式 */
+    .weather-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .weather-label {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    .weather-icon {
+      font-size: 22px;
+      line-height: 1;
+    }
+
+    .weather-text {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-top: 14px;
+    }
+
+    /* 手机端屏幕自适应 */
+    @media (max-width: 480px) {
+      .widget-row {
+        grid-template-columns: 1fr;
+      }
+    }
+
     /* 照片展示模块样式 */
     .photo-card {
       background-color: var(--card-bg);
@@ -147,6 +246,7 @@
       overflow: hidden;
       box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
       transition: transform 0.25s ease, box-shadow 0.25s ease;
+      margin-bottom: 20px;
     }
 
     .photo-card:hover {
@@ -206,25 +306,56 @@
 <body>
 
   <div class="container">
+    <!-- 顶部标题区：现在已正常闭合 -->
     <div class="header">
       <h1>Jacky House</h1>
       <p>记录生活中的美好瞬间与日常灵感</p>
-      
-      <!-- 天气展示容器 -->
-      <div class="weather-bar" id="weatherBar">
-        <span class="weather-icon" id="weatherIcon">⏳</span>
-        <span id="weatherText">正在获取今日天气...</span>
-      </div>
     </div>
 
+    <!-- 内容主体区 -->
     <div class="content">
-      <!-- 每日签到区域 -->
-      <div class="checkin-box">
-        <div class="checkin-info">
-          <div class="checkin-title" id="checkinTitle">📅 今日签到</div>
-          <div class="checkin-status" id="checkinStatus">今日尚未签到</div>
+<!-- 个人社交媒体链接栏 -->
+      <div class="social-bar">
+        <!-- 1. YouTube -->
+        <a href="https://www.youtube.com/@jackyguuu" target="_blank" rel="noopener noreferrer" class="social-btn btn-youtube" title="YouTube">
+          <svg viewBox="0 0 24 24" class="social-icon"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+        </a>
+
+        <!-- 2. Facebook -->
+        <a href="https://www.facebook.com/profile.php?id=100005342419384" target="_blank" rel="noopener noreferrer" class="social-btn btn-facebook" title="Facebook">
+          <svg viewBox="0 0 24 24" class="social-icon"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+        </a>
+
+        <!-- 3. Instagram -->
+        <a href="https://www.instagram.com/eason.gu/" target="_blank" rel="noopener noreferrer" class="social-btn btn-instagram" title="Instagram">
+          <svg viewBox="0 0 24 24" class="social-icon"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+        </a>
+
+        <!-- 4. X (原 Twitter) -->
+        <a href="https://x.com/jacky841" target="_blank" rel="noopener noreferrer" class="social-btn btn-x" title="X (Twitter)">
+          <svg viewBox="0 0 24 24" class="social-icon"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+        </a>
+      </div>
+
+      <!-- 签到与天气并排区域 -->
+      <div class="widget-row">
+        <!-- 左侧：签到卡片 -->
+        <div class="widget-card checkin-card">
+          <div class="card-info">
+            <div class="checkin-title" id="checkinTitle">📅 今日签到</div>
+            <div class="checkin-status" id="checkinStatus">今日尚未签到</div>
+          </div>
+          <button class="btn" id="checkinBtn">立即签到</button>
         </div>
-        <button class="btn" id="checkinBtn">立即签到</button>
+
+        <!-- 右侧：天气卡片 -->
+        <div class="widget-card weather-card" id="weatherBar">
+          <div class="weather-header">
+            <span class="weather-label">实时天气</span>
+            <span class="weather-icon" id="weatherIcon">⏳</span>
+          </div>
+          <div class="weather-text" id="weatherText">正在获取天气...</div>
+        </div>
       </div>
 
       <!-- 照片展示模块 -->
@@ -242,30 +373,95 @@
           <div class="photo-desc">生活不在别处，当下即是全部。保留一份松弛感，用心感受生活细节。</div>
         </div>
       </div>
+      <!-- 第二张精选照片 -->
+      <div class="photo-card">
+        <div class="photo-wrapper">
+          <!-- 替换为你的第二张照片文件名，例如 photo_2.jpg -->
+          <img 
+            src="photo_2026-10-21_19-49-12.jpg" 
+            alt="第二张精选照片" 
+            class="photo-img"
+          >
+        </div>
+        <div class="photo-info">
+          <div class="photo-tag">旅行足迹</div>
+          <div class="photo-title">山野漫游 · 拥抱自然</div>
+          <div class="photo-desc">步履不停，穿行于山川与林海之间。记录每一寸风景，收藏每一种心情。</div>
+        </div>
+      </div>
     </div>
   </div>
 
   <script>
-    // 1. 签到功能与连续天数逻辑
-    let streakDays = 0;
-
+    // ================= 1. 签到功能与 localStorage 本地持久化 =================
     const checkinBtn = document.getElementById('checkinBtn');
     const checkinStatus = document.getElementById('checkinStatus');
     const checkinTitle = document.getElementById('checkinTitle');
 
-    checkinBtn.addEventListener('click', () => {
-      streakDays++;
+    // 工具函数：获取今天日期的格式化字符串 (例如 "2026-10-21")
+    function getTodayStr() {
+      const d = new Date();
+      const y = d.getFullYear();
+      const m = String(d.getMonth() + 1).padStart(2, '0');
+      const day = String(d.getDate()).padStart(2, '0');
+      return `${y}-${m}-${day}`;
+    }
 
+    // 从浏览器的 localStorage 读取历史数据
+    let streakDays = parseInt(localStorage.getItem('checkin_streak') || '0', 10);
+    const lastDate = localStorage.getItem('checkin_last_date');
+    const lastTime = localStorage.getItem('checkin_last_time');
+    const todayStr = getTodayStr();
+
+    // 页面载入时：判断今天是否已经签过到
+    if (lastDate === todayStr) {
+      // 状态 A：今天已经签过到，恢复置灰和完成文字
       checkinBtn.disabled = true;
       checkinBtn.textContent = '已签到';
-
       checkinTitle.innerHTML = `📅 已签到 <span style="color: var(--primary); font-weight: 700;">${streakDays}</span> 天`;
+      checkinStatus.textContent = `已于 ${lastTime} 完成签到 ✅`;
+      checkinStatus.style.color = 'var(--primary)';
+    } else {
+      // 状态 B：今天还没签到
+      // 检查是否断签（如果上次签到既不是今天也不是昨天，重置连续天数为 0）
+      const yesterday = new Date();
+      yesterday.setDate(yesterday.getDate() - 1);
+      const yStr = `${yesterday.getFullYear()}-${String(yesterday.getMonth() + 1).padStart(2, '0')}-${String(yesterday.getDate()).padStart(2, '0')}`;
+      
+      if (lastDate && lastDate !== yStr) {
+        streakDays = 0;
+        localStorage.setItem('checkin_streak', '0');
+      }
+    }
+
+    // 点击签到按钮
+    checkinBtn.addEventListener('click', () => {
+      streakDays++;
+// ================= 触发五彩纸屑动效 =================
+      if (typeof confetti === 'function') {
+        confetti({
+          particleCount: 90,     // 纸屑粒子的数量
+          spread: 70,            // 爆炸散开的角度（范围越大散得越开）
+          origin: { y: 0.65 },   // 喷射起点（0 为屏幕最顶端，1 为最底端）
+          colors: ['#21926c', '#3b82f6', '#f59e0b', '#ec4899', '#8b5cf6'] // 包含你的主题绿与蓝金配色
+        });
+      }
 
       const now = new Date();
       const hours = String(now.getHours()).padStart(2, '0');
       const minutes = String(now.getMinutes()).padStart(2, '0');
+      const timeStr = `${hours}:${minutes}`;
 
-      checkinStatus.textContent = `已于 ${hours}:${minutes} 完成签到 ✅`;
+      // 核心：把最新的签到数据保存到 localStorage
+      localStorage.setItem('checkin_streak', streakDays);
+      localStorage.setItem('checkin_last_date', todayStr);
+      localStorage.setItem('checkin_last_time', timeStr);
+
+      // 更新界面展示
+      checkinBtn.disabled = true;
+      checkinBtn.textContent = '已签到';
+      checkinTitle.innerHTML = `📅 已签到 <span style="color: var(--primary); font-weight: 700;">${streakDays}</span> 天`;
+      checkinStatus.textContent = `已于 ${timeStr} 完成签到 ✅`;
       checkinStatus.style.color = 'var(--primary)';
     });
 
