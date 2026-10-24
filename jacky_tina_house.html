@@ -1436,18 +1436,18 @@
     }
 
     .photo-wrapper {
-  width: 100%;
-  height: auto; /* 高度不再定死，按图片自身高度自动撑开 */
-  background-color: #f8fafc;
-  overflow: hidden;
+      width: 100%;
+      height: 220px;
+      background-color: #f1f5f9;
+      overflow: hidden;
     }
 
 .photo-img {
-  width: 100%;
-  height: auto; /* 关键：高度由原图长宽比自动计算，零拉伸、零裁剪 */
-  display: block;
-  object-fit: contain;
-  transition: transform 0.3s ease;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.6s ease;
     }
 
 .photo-card:hover .photo-img {
@@ -1481,6 +1481,338 @@
       font-size: 13px;
       line-height: 1.6;
       color: var(--text-muted);
+    }
+    /* 游戏 5：数字轮盘专属样式 */
+.roulette-stage-wrapper { display: none; flex-direction: column; align-items: center; width: 100%; gap: 14px; }
+.roulette-wheel-box { position: relative; width: 270px; height: 270px; margin-bottom: 12px; }
+.roulette-ball-pointer { position: absolute; top: -8px; left: 50%; transform: translateX(-50%); width: 16px; height: 16px; background: #facc15; border: 2px solid #ffffff; border-radius: 50%; z-index: 10; box-shadow: 0 2px 6px rgba(0,0,0,0.4); }
+#rouletteCanvas { width: 270px; height: 270px; border-radius: 50%; box-shadow: 0 8px 24px rgba(0,0,0,0.18); transition: transform 4.5s cubic-bezier(0.12, 0.88, 0.12, 1); }
+.roulette-center-pin { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 46px; height: 46px; border-radius: 50%; background: #0f172a; border: 3px solid #facc15; display: flex; align-items: center; justify-content: center; color: #ffffff; font-weight: 700; font-size: 16px; z-index: 5; }
+.roulette-board { width: 100%; max-width: 520px; background: #0f172a; padding: 14px; border-radius: 12px; border: 2px solid #334155; display: flex; flex-direction: column; gap: 10px; }
+.roulette-numbers-row { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; }
+.r-btn { padding: 8px 4px; border-radius: 6px; font-weight: 700; font-size: 13px; color: #ffffff; cursor: pointer; border: 2px solid transparent; user-select: none; transition: all 0.15s; }
+.r-btn:hover { transform: scale(1.05); }
+.r-btn.selected { border-color: #facc15; box-shadow: 0 0 10px rgba(250, 204, 21, 0.8); }
+.r-green { background: #15803d; } .r-red { background: #dc2626; } .r-black { background: #1e293b; }
+.roulette-outside-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.r-outside-btn { background: #1e293b; padding: 9px 4px; border-radius: 6px; font-size: 12px; font-weight: 700; color: #ffffff; cursor: pointer; border: 2px solid transparent; transition: all 0.15s; }
+.r-outside-btn.selected { border-color: #facc15; background: #334155; box-shadow: 0 0 10px rgba(250, 204, 21, 0.7); }
+.btn-spin-roulette { background: linear-gradient(135deg, #f59e0b, #d97706); color: #ffffff; border: none; padding: 10px 32px; border-radius: 8px; font-size: 14px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3); transition: all 0.2s ease; width: 260px; }
+.btn-spin-roulette:hover:not(:disabled) { transform: translateY(-1px); }
+.btn-spin-roulette:disabled { background: #94a3b8; cursor: not-allowed; }
+
+/* 游戏 7：成语抢答专属样式 */
+.idiom-stage-wrapper { display: none; flex-direction: column; align-items: center; width: 100%; gap: 14px; }
+.idiom-rule-table { width: 100%; max-width: 500px; border-collapse: collapse; font-size: 12px; margin-bottom: 8px; background: var(--bg-color); border-radius: 8px; overflow: hidden; border: 1px solid var(--border-color); }
+.idiom-rule-table th, .idiom-rule-table td { padding: 7px 10px; border: 1px solid var(--border-color); text-align: center; }
+.idiom-rule-table th { background: #f1f5f9; font-weight: 700; color: var(--text-main); }
+.idiom-quiz-box { width: 100%; max-width: 500px; background: var(--bg-color); border: 2px solid var(--border-color); border-radius: 14px; padding: 20px; display: flex; flex-direction: column; align-items: center; gap: 16px; }
+.idiom-progress-bar-wrap { width: 100%; height: 6px; background: #e2e8f0; border-radius: 999px; overflow: hidden; }
+.idiom-timer-bar { width: 100%; height: 100%; background: var(--primary); transition: width 1s linear; }
+.idiom-expression-display { font-size: 26px; font-weight: 700; letter-spacing: 4px; color: var(--text-main); background: var(--card-bg); padding: 12px 24px; border-radius: 10px; border: 1px solid var(--border-color); }
+.idiom-options-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; width: 100%; }
+.idiom-opt-btn { background: var(--card-bg); border: 2px solid var(--border-color); padding: 12px; border-radius: 10px; font-size: 16px; font-weight: 700; color: var(--text-main); cursor: pointer; transition: all 0.15s ease; }
+.idiom-opt-btn:hover { border-color: var(--primary); background: #f0fdf4; }
+.idiom-opt-btn.correct { background: #22c55e !important; color: #ffffff !important; border-color: #16a34a !important; }
+.idiom-opt-btn.wrong { background: #ef4444 !important; color: #ffffff !important; border-color: #dc2626 !important; }
+/* ================= 游戏 5：数字轮盘 (0~12 迷你欧盘) 样式 ================= */
+    .roulette-stage-wrapper {
+      width: 100%;
+      max-width: 720px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background: linear-gradient(145deg, #064e3b, #022c22);
+      border: 3px solid #f59e0b;
+      border-radius: 16px;
+      padding: 20px;
+      color: #ffffff;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+      margin-bottom: 12px;
+    }
+
+    .roulette-top-bar {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .roulette-wheel-display {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      background: rgba(0, 0, 0, 0.45);
+      padding: 10px 20px;
+      border-radius: 999px;
+      border: 2px solid rgba(250, 204, 21, 0.5);
+    }
+
+    .roulette-ball-num {
+      width: 54px;
+      height: 54px;
+      border-radius: 50%;
+      background: #10b981;
+      color: #ffffff;
+      font-size: 24px;
+      font-weight: 900;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: inset 0 3px 6px rgba(255,255,255,0.4), 0 4px 10px rgba(0,0,0,0.4);
+      border: 3px solid #ffffff;
+      transition: transform 0.15s ease, background-color 0.2s;
+    }
+
+    .roulette-ball-num.rolling {
+      animation: pulseBall 0.25s infinite alternate;
+    }
+
+    @keyframes pulseBall {
+      from { transform: scale(0.92) rotate(-8deg); }
+      to { transform: scale(1.08) rotate(8deg); }
+    }
+
+    .roulette-bet-select-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .roulette-chip-btn {
+      padding: 5px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      background: rgba(255, 255, 255, 0.1);
+      color: #ffffff;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .roulette-chip-btn.active {
+      background: #facc15;
+      color: #0f172a;
+      border-color: #facc15;
+      box-shadow: 0 2px 8px rgba(250, 204, 21, 0.4);
+    }
+
+    .roulette-table-grid {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .roulette-numbers-row {
+      display: grid;
+      grid-template-columns: 60px repeat(6, 1fr);
+      gap: 8px;
+      width: 100%;
+    }
+
+    .r-cell {
+      padding: 12px 6px;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 800;
+      text-align: center;
+      cursor: pointer;
+      border: 2px solid rgba(255, 255, 255, 0.25);
+      transition: all 0.15s ease;
+      user-select: none;
+      position: relative;
+    }
+
+    .r-cell:hover {
+      transform: translateY(-2px);
+      border-color: #facc15;
+    }
+
+    .r-cell.selected {
+      border-color: #facc15;
+      box-shadow: 0 0 0 3px rgba(250, 204, 21, 0.45);
+      transform: translateY(-2px);
+    }
+
+    .r-cell.r-green {
+      background: #10b981;
+      grid-row: span 2;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+    }
+
+    .r-cell.r-red { background: #dc2626; }
+    .r-cell.r-black { background: #1e293b; }
+
+    .roulette-outside-row {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 8px;
+      width: 100%;
+    }
+
+    .r-out-btn {
+      padding: 10px 4px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 700;
+      text-align: center;
+      cursor: pointer;
+      background: rgba(255, 255, 255, 0.12);
+      border: 2px solid rgba(255, 255, 255, 0.25);
+      color: #ffffff;
+      transition: all 0.15s;
+    }
+
+    .r-out-btn.out-red { background: rgba(220, 38, 38, 0.7); }
+    .r-out-btn.out-black { background: rgba(30, 41, 59, 0.85); }
+
+    .r-out-btn.selected {
+      border-color: #facc15;
+      box-shadow: 0 0 0 3px rgba(250, 204, 21, 0.45);
+      background: rgba(250, 204, 21, 0.25);
+    }
+
+    /* ================= 游戏 6：Show Hand (五张梭哈) 样式 ================= */
+    .showhand-stage-wrapper {
+      width: 100%;
+      max-width: 720px;
+      background: radial-gradient(circle at center, #0f5132 0%, #052c1e 100%);
+      border: 3px solid #d97706;
+      border-radius: 16px;
+      padding: 20px;
+      color: #ffffff;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+      margin-bottom: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .poker-hud-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(0, 0, 0, 0.35);
+      padding: 8px 16px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 700;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .poker-hand-zone {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      min-height: 118px;
+      padding: 8px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    .poker-zone-label {
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.8);
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .poker-rank-badge {
+      background: #f59e0b;
+      color: #0f172a;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .poker-cards-row {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .playing-card {
+      width: 64px;
+      height: 92px;
+      background: #ffffff;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.35);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 6px;
+      color: #0f172a;
+      font-weight: 800;
+      user-select: none;
+      position: relative;
+      border: 2px solid #e2e8f0;
+      transition: transform 0.2s ease;
+    }
+
+    .playing-card.red-suit { color: #dc2626; }
+    .playing-card.black-suit { color: #0f172a; }
+
+    .playing-card.card-hidden {
+      background: repeating-linear-gradient(
+        45deg,
+        #1e3a8a,
+        #1e3a8a 8px,
+        #1d4ed8 8px,
+        #1d4ed8 16px
+      );
+      border-color: #93c5fd;
+      color: transparent;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .playing-card.card-hidden::after {
+      content: "🎴";
+      font-size: 26px;
+      color: #ffffff;
+    }
+
+    .card-corner-top {
+      font-size: 13px;
+      line-height: 1;
+      text-align: left;
+    }
+
+    .card-center-suit {
+      font-size: 26px;
+      text-align: center;
+      line-height: 1;
+    }
+
+    .card-corner-bottom {
+      font-size: 12px;
+      line-height: 1;
+      text-align: right;
+      opacity: 0.75;
+    }
+
+    .poker-actions-bar {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 4px;
     }
   </style>
 </head>
@@ -1580,7 +1912,7 @@
           <div class="game-entry-title">🎮 休闲游戏厅</div>
           <div class="game-entry-desc">纯鼠标点击畅玩趣味小游戏，赢取海量积分与神秘奖励！</div>
         </div>
-        <button class="btn btn-game-entry" id="openGameModalBtn">进入游戏厅 ➔</button>
+        <button class="btn btn-game-entry" id="openGameModalBtn">游戏大厅➔</button>
       </div>
 
       <!-- 照片展示模块 -->
@@ -1676,7 +2008,7 @@
             <div class="game-item-name">数字轮盘</div>
             <div class="game-item-cost">单次 2~10 积分</div>
           </div>
-          <button class="game-item-play-btn btn-pending">敬请期待</button>
+          <button class="game-item-play-btn btn-pending">立即游玩</button>
         </div>
 
         <!-- 游戏 6：Show Hand (规划就绪) -->
@@ -1686,7 +2018,7 @@
             <div class="game-item-name">Show Hand</div>
             <div class="game-item-cost">底注 10 积分</div>
           </div>
-          <button class="game-item-play-btn btn-pending">敬请期待</button>
+          <button class="game-item-play-btn btn-pending">立即游玩</button>
         </div>
 
         <!-- 游戏 7：成语抢答 (规划就绪) -->
@@ -1823,6 +2155,72 @@
             <button class="btn-spin-slot" id="spinSlotBtn">🕹️ 拉杆启动 (消耗 2 积分)</button>
           </div>
           <div class="slot-result-msg" id="slotResultMsg">三个相同大奖翻倍，两个相同保底盈利 50%！</div>
+        </div>
+
+        <!-- 游戏 5：数字轮盘舞台 -->
+        <div class="roulette-stage-wrapper" id="rouletteGameWrapper">
+          <div class="roulette-wheel-box">
+            <div class="roulette-ball-pointer"></div>
+            <canvas id="rouletteCanvas" width="540" height="540"></canvas>
+            <div class="roulette-center-pin" id="rouletteCenterPin">🎯</div>
+          </div>
+          <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 2px;">① 选择下注筹码：</div>
+          <div class="chips-row">
+            <div class="chip-btn chip-2 active" data-rchip="2">2</div>
+            <div class="chip-btn chip-5" data-rchip="5">5</div>
+            <div class="chip-btn chip-8" data-rchip="8">8</div>
+            <div class="chip-btn chip-10" data-rchip="10">10</div>
+          </div>
+          <div class="roulette-board">
+            <div style="font-size: 11px; color: #94a3b8; text-align: left;">② 点击选择下注区域（单号 1:10 赔率，红黑/单双/大小 1:1）：</div>
+            <div class="roulette-numbers-row" id="rouletteNumbersRow"></div>
+            <div class="roulette-outside-row">
+              <button class="r-outside-btn selected" data-rtarget="red">🔴 押红 (1:1)</button>
+              <button class="r-outside-btn" data-rtarget="black">⚫ 押黑 (1:1)</button>
+              <button class="r-outside-btn" data-rtarget="odd">🔢 押单数 (1:1)</button>
+              <button class="r-outside-btn" data-rtarget="even">🔢 押双数 (1:1)</button>
+            </div>
+            <div class="roulette-outside-row" style="grid-template-columns: 1fr 1fr;">
+              <button class="r-outside-btn" data-rtarget="low">🔽 押小 (1~6)</button>
+              <button class="r-outside-btn" data-rtarget="high">🔼 押大 (7~12)</button>
+            </div>
+          </div>
+          <button class="btn-spin-roulette" id="spinRouletteBtn">🎯 旋转轮盘 (押红 · 下注 2 积分)</button>
+          <div id="rouletteResultMsg" style="font-size: 13px; font-weight: 600; color: var(--text-muted);">买定离手，点击按钮开转！</div>
+        </div>
+
+        <!-- 游戏 7：成语抢答舞台 -->
+        <div class="idiom-stage-wrapper" id="idiomGameWrapper">
+          <div style="display: flex; justify-content: space-between; width: 100%; max-width: 500px; font-size: 12px; font-weight: 700; color: var(--text-muted);">
+            <span id="idiomDailyRounds">今日剩余局数: 5 / 5 局</span>
+            <span id="idiomStreakBadge" style="color: #d97706;">满分连胜: 0 次 (+0分)</span>
+          </div>
+          <table class="idiom-rule-table">
+            <thead>
+              <tr><th>答对题数</th><th>结算积分</th><th>扣除5分门票【净损益】</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>0 ~ 3 题</td><td>+0 分</td><td style="color:#ef4444;">-5 分（净亏）</td></tr>
+              <tr><td>4 ~ 5 题</td><td>+5 分</td><td style="color:#64748b;">±0 分（保本）</td></tr>
+              <tr><td>6 ~ 7 题</td><td>+8 分</td><td style="color:#16a34a;">+3 分（净赚 3 分）</td></tr>
+              <tr><td>8 ~ 9 题</td><td>+10 分</td><td style="color:#16a34a;">+5 分（净赚 5 分）</td></tr>
+              <tr><td>10 题 (全对)</td><td>+13 分</td><td style="color:#d97706; font-weight:700;">+8 分（连胜再+2分）</td></tr>
+            </tbody>
+          </table>
+          <div id="idiomLobbyBox" style="width: 100%; max-width: 500px; text-align: center;">
+            <button class="btn" style="padding: 12px 36px; font-size: 15px; font-weight: 700;" id="startIdiomBtn">📜 开始挑战 (门票 5 积分)</button>
+          </div>
+          <div class="idiom-quiz-box" id="idiomQuizBox" style="display: none;">
+            <div style="width: 100%; display: flex; justify-content: space-between; font-size: 13px; font-weight: 700;">
+              <span id="idiomCurrentIndex">第 1 / 10 题</span>
+              <span id="idiomTimerText" style="color: #ef4444;">8 秒</span>
+            </div>
+            <div class="idiom-progress-bar-wrap"><div class="idiom-timer-bar" id="idiomTimerBar"></div></div>
+            <div class="idiom-expression-display" id="idiomExpression">画 龙 点 【？】</div>
+            <div id="idiomExplanation" style="font-size: 12px; color: var(--text-muted); min-height: 18px;">比喻在关键处点缀，使内容更加生动有力。</div>
+            <div class="idiom-options-grid" id="idiomOptionsGrid"></div>
+          </div>
+          <div id="idiomResultMsg" style="font-size: 13px; font-weight: 600; color: var(--text-muted);">门票 5 积分，考验你的成语底蕴！</div>
         </div>
 
       </div>
@@ -2360,6 +2758,10 @@
       diceGameWrapper.style.display = 'none';
       scratchGameWrapper.style.display = 'none';
       slotGameWrapper.style.display = 'none';
+      const rWrap = document.getElementById('rouletteGameWrapper');
+      const iWrap = document.getElementById('idiomGameWrapper');
+      if (rWrap) rWrap.style.display = 'none';
+      if (iWrap) iWrap.style.display = 'none';
       if (probPanel) probPanel.classList.remove('active');
       updateDailyBadge();
     }
@@ -2386,36 +2788,46 @@
         const gameType = card.getAttribute('data-game');
         const gameName = card.querySelector('.game-item-name').textContent;
 
-        if (['roulette', 'showhand', 'idiom', 'blackjack'].includes(gameType)) {
-          showToast(`【${gameName}】正在紧锣密鼓开发中，下一版即将上线！`);
-          return;
-        }
+        if (['showhand', 'blackjack'].includes(gameType)) {
+      showToast(`【${gameName}】正在紧锣密鼓开发中，下一版即可畅玩！`);
+      return;
+    }
 
-        // 进入对应的游戏舞台
-        classicLobbyView.style.display = 'none';
-        gameStageView.style.display = 'flex';
-        wheelGameWrapper.style.display = 'none';
-        diceGameWrapper.style.display = 'none';
-        scratchGameWrapper.style.display = 'none';
-        slotGameWrapper.style.display = 'none';
+    // 进入对应的游戏舞台
+    classicLobbyView.style.display = 'none';
+    gameStageView.style.display = 'flex';
+    wheelGameWrapper.style.display = 'none';
+    diceGameWrapper.style.display = 'none';
+    scratchGameWrapper.style.display = 'none';
+    slotGameWrapper.style.display = 'none';
+    rouletteGameWrapper.style.display = 'none';
+    idiomGameWrapper.style.display = 'none';
 
-        if (gameType === 'wheel') {
-          currentStageGameName.textContent = '🎡 幸运大转盘';
-          wheelGameWrapper.style.display = 'flex';
-          initWheel();
-        } else if (gameType === 'dice') {
-          currentStageGameName.textContent = '🎲 摇骰子猜大小';
-          diceGameWrapper.style.display = 'flex';
-          initDiceGame();
-        } else if (gameType === 'scratch') {
-          currentStageGameName.textContent = '🎫 刮刮乐';
-          scratchGameWrapper.style.display = 'flex';
-          initScratchGame();
-        } else if (gameType === 'slot') {
-          currentStageGameName.textContent = '🎰 水果机';
-          slotGameWrapper.style.display = 'flex';
-          initSlotGame();
-        }
+    if (gameType === 'wheel') {
+      currentStageGameName.textContent = '🎡 幸运大转盘';
+      wheelGameWrapper.style.display = 'flex';
+      initWheel();
+    } else if (gameType === 'dice') {
+      currentStageGameName.textContent = '🎲 摇骰子猜大小';
+      diceGameWrapper.style.display = 'flex';
+      initDiceGame();
+    } else if (gameType === 'scratch') {
+      currentStageGameName.textContent = '🎫 刮刮乐';
+      scratchGameWrapper.style.display = 'flex';
+      initScratchGame();
+    } else if (gameType === 'slot') {
+      currentStageGameName.textContent = '🎰 水果机';
+      slotGameWrapper.style.display = 'flex';
+      initSlotGame();
+    } else if (gameType === 'roulette') {
+      currentStageGameName.textContent = '🎯 数字轮盘';
+      rouletteGameWrapper.style.display = 'flex';
+      initRouletteGame();
+    } else if (gameType === 'idiom') {
+      currentStageGameName.textContent = '📜 成语抢答';
+      idiomGameWrapper.style.display = 'flex';
+      initIdiomGame();
+    }
       });
     });
 
@@ -2499,8 +2911,8 @@
         ctx.rotate(startAngle + sliceAngle / 2);
         ctx.textAlign = 'right';
         ctx.fillStyle = WHEEL_PRIZES[i].textColor;
-        ctx.font = 'bold 22px -apple-system, sans-serif';
-        ctx.fillText(WHEEL_PRIZES[i].text, radius - 36, 8);
+        ctx.font = 'bold 28px -apple-system, sans-serif';
+        ctx.fillText(WHEEL_PRIZES[i].text, radius - 42, 10);
         ctx.restore();
       }
 
@@ -3106,6 +3518,243 @@
         updateSlotButtonText();
       }, 2100);
     });
+    // 注册新舞台节点引用
+    const rouletteGameWrapper = document.getElementById('rouletteGameWrapper');
+    const idiomGameWrapper = document.getElementById('idiomGameWrapper');
+
+    // ================= 9. 【数字轮盘】核心引擎 =================
+    const rouletteCanvas = document.getElementById('rouletteCanvas');
+    const spinRouletteBtn = document.getElementById('spinRouletteBtn');
+    const rouletteResultMsg = document.getElementById('rouletteResultMsg');
+    const rouletteNumbersRow = document.getElementById('rouletteNumbersRow');
+    const rouletteCenterPin = document.getElementById('rouletteCenterPin');
+
+    const ROULETTE_NUMS = [
+      { num: 0,  color: '#15803d', type: 'green' },
+      { num: 1,  color: '#dc2626', type: 'red' },
+      { num: 2,  color: '#1e293b', type: 'black' },
+      { num: 3,  color: '#dc2626', type: 'red' },
+      { num: 4,  color: '#1e293b', type: 'black' },
+      { num: 5,  color: '#dc2626', type: 'red' },
+      { num: 6,  color: '#1e293b', type: 'black' },
+      { num: 7,  color: '#dc2626', type: 'red' },
+      { num: 8,  color: '#1e293b', type: 'black' },
+      { num: 9,  color: '#dc2626', type: 'red' },
+      { num: 10, color: '#1e293b', type: 'black' },
+      { num: 11, color: '#1e293b', type: 'black' },
+      { num: 12, color: '#dc2626', type: 'red' }
+    ];
+
+    let currentRChip = 2, currentRTarget = 'red', isRSpinning = false, currentRRotation = 0;
+
+    function drawRouletteWheel() {
+      if (!rouletteCanvas) return;
+      const ctx = rouletteCanvas.getContext('2d');
+      const count = ROULETTE_NUMS.length, slice = (2 * Math.PI) / count, radius = rouletteCanvas.width / 2;
+      ctx.clearRect(0, 0, rouletteCanvas.width, rouletteCanvas.height);
+      for (let i = 0; i < count; i++) {
+        const start = i * slice, end = start + slice;
+        ctx.beginPath(); ctx.moveTo(radius, radius); ctx.arc(radius, radius, radius - 6, start, end); ctx.closePath();
+        ctx.fillStyle = ROULETTE_NUMS[i].color; ctx.fill();
+        ctx.lineWidth = 2; ctx.strokeStyle = '#ffffff'; ctx.stroke();
+        ctx.save(); ctx.translate(radius, radius); ctx.rotate(start + slice / 2);
+        ctx.textAlign = 'right'; ctx.fillStyle = '#ffffff'; ctx.font = 'bold 24px -apple-system, sans-serif';
+        ctx.fillText(ROULETTE_NUMS[i].num.toString(), radius - 30, 8); ctx.restore();
+      }
+      ctx.beginPath(); ctx.arc(radius, radius, radius - 4, 0, 2 * Math.PI); ctx.lineWidth = 6; ctx.strokeStyle = '#facc15'; ctx.stroke();
+    }
+
+    function initRouletteGame() {
+      drawRouletteWheel(); rouletteCenterPin.textContent = '🎯'; rouletteNumbersRow.innerHTML = '';
+      ROULETTE_NUMS.forEach(item => {
+        const btn = document.createElement('button');
+        btn.className = `r-btn ${item.type === 'green' ? 'r-green' : (item.type === 'red' ? 'r-red' : 'r-black')}`;
+        btn.textContent = item.num;
+        btn.addEventListener('click', () => {
+          if (isRSpinning) return;
+          document.querySelectorAll('.r-btn, .r-outside-btn').forEach(b => b.classList.remove('selected'));
+          btn.classList.add('selected'); currentRTarget = `num_${item.num}`; updateRouletteBtnText();
+        });
+        rouletteNumbersRow.appendChild(btn);
+      });
+      updateRouletteBtnText();
+    }
+
+    function updateRouletteBtnText() {
+      let desc = currentRTarget.startsWith('num_') ? `单号 ${currentRTarget.replace('num_', '')} (1:10)` :
+        ({ red: '押红', black: '押黑', odd: '押单数', even: '押双数', low: '押小(1-6)', high: '押大(7-12)' }[currentRTarget] || currentRTarget) + ' (1:1)';
+      spinRouletteBtn.textContent = `🎯 旋转轮盘 (${desc} · 下注 ${currentRChip} 分)`;
+    }
+
+    document.querySelectorAll('.roulette-stage-wrapper [data-rchip]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (isRSpinning) return;
+        document.querySelectorAll('.roulette-stage-wrapper [data-rchip]').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active'); currentRChip = parseInt(btn.getAttribute('data-rchip'), 10); updateRouletteBtnText();
+      });
+    });
+
+    document.querySelectorAll('.r-outside-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (isRSpinning) return;
+        document.querySelectorAll('.r-btn, .r-outside-btn').forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected'); currentRTarget = btn.getAttribute('data-rtarget'); updateRouletteBtnText();
+      });
+    });
+
+    spinRouletteBtn.addEventListener('click', () => {
+      if (isRSpinning) return;
+      if (getPoints() < currentRChip) { showToast(`积分不足 ${currentRChip} 分！`); return; }
+      if (!canInvest(currentRChip)) return;
+      updatePoints(-currentRChip); recordDailyInvest(currentRChip);
+      isRSpinning = true; spinRouletteBtn.disabled = true;
+      rouletteResultMsg.textContent = '小球在轮盘中飞速滚动中...'; rouletteResultMsg.style.color = 'var(--text-muted)';
+
+      const winIdx = Math.floor(Math.random() * ROULETTE_NUMS.length), outcome = ROULETTE_NUMS[winIdx];
+      const sliceDeg = 360 / ROULETTE_NUMS.length, targetDeg = (270 - (winIdx * sliceDeg + sliceDeg / 2) + 360) % 360;
+      currentRRotation += 5 * 360 + ((targetDeg - (currentRRotation % 360) + 360) % 360);
+      rouletteCanvas.style.transform = `rotate(${currentRRotation}deg)`;
+
+      setTimeout(() => {
+        isRSpinning = false; spinRouletteBtn.disabled = false; rouletteCenterPin.textContent = outcome.num;
+        let won = false, winMultiplier = 0;
+        if (currentRTarget === `num_${outcome.num}`) { won = true; winMultiplier = 10; }
+        else if (outcome.num !== 0) {
+          if (currentRTarget === 'red' && outcome.type === 'red') won = true;
+          else if (currentRTarget === 'black' && outcome.type === 'black') won = true;
+          else if (currentRTarget === 'odd' && outcome.num % 2 === 1) won = true;
+          else if (currentRTarget === 'even' && outcome.num % 2 === 0) won = true;
+          else if (currentRTarget === 'low' && outcome.num >= 1 && outcome.num <= 6) won = true;
+          else if (currentRTarget === 'high' && outcome.num >= 7 && outcome.num <= 12) won = true;
+          if (won) winMultiplier = 1;
+        }
+        const colorName = outcome.type === 'green' ? '绿' : (outcome.type === 'red' ? '红' : '黑');
+        if (won) {
+          const winPoints = currentRChip + (currentRChip * winMultiplier); updatePoints(winPoints);
+          rouletteResultMsg.innerHTML = `🎉 开出【${outcome.num}号 ${colorName}】！恭喜获胜，净赚 <span style="color:#f59e0b;">+${winPoints - currentRChip}</span> 积分！`;
+          rouletteResultMsg.style.color = '#15803d';
+          if (typeof confetti === 'function') confetti({ particleCount: 90, spread: 70, origin: { y: 0.6 } });
+        } else {
+          rouletteResultMsg.textContent = `开出【${outcome.num}号 ${colorName}】，本局惜败 ${currentRChip} 积分，再来一把！`;
+          rouletteResultMsg.style.color = '#dc2626';
+        }
+      }, 4500);
+    });
+
+    // ================= 10. 【成语抢答】核心引擎 =================
+    const idiomDailyRoundsEl = document.getElementById('idiomDailyRounds');
+    const idiomStreakBadge = document.getElementById('idiomStreakBadge');
+    const startIdiomBtn = document.getElementById('startIdiomBtn');
+    const idiomLobbyBox = document.getElementById('idiomLobbyBox');
+    const idiomQuizBox = document.getElementById('idiomQuizBox');
+    const idiomCurrentIndexEl = document.getElementById('idiomCurrentIndex');
+    const idiomTimerText = document.getElementById('idiomTimerText');
+    const idiomTimerBar = document.getElementById('idiomTimerBar');
+    const idiomExpression = document.getElementById('idiomExpression');
+    const idiomExplanation = document.getElementById('idiomExplanation');
+    const idiomOptionsGrid = document.getElementById('idiomOptionsGrid');
+    const idiomResultMsg = document.getElementById('idiomResultMsg');
+
+    const IDIOM_BANK = [
+      { text: '画龙点【？】', answer: '睛', options: ['睛', '金', '精', '晶'], exp: '比喻在关键处点缀，使内容更加生动有力。' },
+      { text: '卧薪尝【？】', answer: '胆', options: ['胆', '蛋', '淡', '惮'], exp: '形容一个人忍辱负重，发愤图强。' },
+      { text: '破釜沉【？】', answer: '舟', options: ['舟', '州', '周', '洲'], exp: '比喻下定决心，不顾一切干到底。' },
+      { text: '守株待【？】', answer: '兔', options: ['兔', '吐', '图', '涂'], exp: '比喻不知变通，死守狭隘经验。' },
+      { text: '杯弓蛇【？】', answer: '影', options: ['影', '映', '营', '迎'], exp: '比喻因疑虑而引起的虚惊与恐惧。' },
+      { text: '亡羊补【？】', answer: '牢', options: ['牢', '劳', '落', '捞'], exp: '比喻受损失后及时补救，免受更大损失。' },
+      { text: '掩耳盗【？】', answer: '铃', options: ['铃', '零', '灵', '领'], exp: '比喻自欺欺人，自己骗自己。' },
+      { text: '井底之【？】', answer: '蛙', options: ['蛙', '娃', '袜', '挖'], exp: '指见识狭隘短浅的人。' },
+      { text: '愚公移【？】', answer: '山', options: ['山', '石', '海', '水'], exp: '比喻做事有恒心有毅力，不怕困难。' },
+      { text: '狐假虎【？】', answer: '威', options: ['威', '微', '巍', '危'], exp: '比喻依仗别人的势力欺压恐吓他人。' },
+      { text: '拔苗助【？】', answer: '长', options: ['长', '常', '昌', '畅'], exp: '比喻急于求成，反而把事情弄糟。' },
+      { text: '刻舟求【？】', answer: '剑', options: ['剑', '箭', '舰', '践'], exp: '比喻拘泥成例，不知随客观情况变化。' }
+    ];
+
+    let currentRoundQuestions = [], currentQIdx = 0, correctCount = 0, qTimer = null, timeLeft = 8;
+
+    function getIdiomDailyData() {
+      const today = getTodayKey();
+      try {
+        if (localStorage.getItem('idiom_date') !== today) {
+          localStorage.setItem('idiom_date', today); localStorage.setItem('idiom_rounds_left', '5'); localStorage.setItem('idiom_streak_perfect', '0');
+          return { roundsLeft: 5, streak: 0 };
+        }
+        return { roundsLeft: parseInt(localStorage.getItem('idiom_rounds_left') || '5', 10), streak: parseInt(localStorage.getItem('idiom_streak_perfect') || '0', 10) };
+      } catch (e) { return { roundsLeft: 5, streak: 0 }; }
+    }
+
+    function initIdiomGame() {
+      const data = getIdiomDailyData();
+      idiomDailyRoundsEl.textContent = `今日剩余局数: ${data.roundsLeft} / 5 局`;
+      idiomStreakBadge.textContent = `满分连胜: ${data.streak} 局 (每次额外+${data.streak >= 2 ? 2 : 0}分)`;
+      idiomLobbyBox.style.display = 'block'; idiomQuizBox.style.display = 'none';
+      idiomResultMsg.textContent = '门票 5 积分，考验你的成语底蕴！'; idiomResultMsg.style.color = 'var(--text-muted)';
+      clearInterval(qTimer);
+    }
+
+    startIdiomBtn.addEventListener('click', () => {
+      const data = getIdiomDailyData();
+      if (data.roundsLeft <= 0) { showToast('今日 5 局挑战已用尽，请明日再来！'); return; }
+      if (getPoints() < 5) { showToast('积分不足 5 分！'); return; }
+      if (!canInvest(5)) return;
+      updatePoints(-5); recordDailyInvest(5);
+      try { localStorage.setItem('idiom_rounds_left', (data.roundsLeft - 1).toString()); } catch (e) {}
+      idiomDailyRoundsEl.textContent = `今日剩余局数: ${data.roundsLeft - 1} / 5 局`;
+      idiomLobbyBox.style.display = 'none'; idiomQuizBox.style.display = 'flex';
+      currentRoundQuestions = [...IDIOM_BANK].sort(() => Math.random() - 0.5).slice(0, 10);
+      currentQIdx = 0; correctCount = 0; loadNextQuestion();
+    });
+
+    function loadNextQuestion() {
+      if (currentQIdx >= currentRoundQuestions.length) { settleIdiomRound(); return; }
+      const q = currentRoundQuestions[currentQIdx];
+      idiomCurrentIndexEl.textContent = `第 ${currentQIdx + 1} / 10 题 (已对 ${correctCount} 题)`;
+      idiomExpression.textContent = q.text; idiomExplanation.textContent = q.exp; idiomOptionsGrid.innerHTML = '';
+      q.options.forEach(opt => {
+        const btn = document.createElement('button'); btn.className = 'idiom-opt-btn'; btn.textContent = opt;
+        btn.addEventListener('click', () => handleAnswer(opt, btn)); idiomOptionsGrid.appendChild(btn);
+      });
+      clearInterval(qTimer); timeLeft = 8; idiomTimerText.textContent = `${timeLeft} 秒`; idiomTimerBar.style.width = '100%';
+      qTimer = setInterval(() => {
+        timeLeft--; idiomTimerText.textContent = `${timeLeft} 秒`; idiomTimerBar.style.width = `${(timeLeft / 8) * 100}%`;
+        if (timeLeft <= 0) { clearInterval(qTimer); handleAnswer(null, null); }
+      }, 1000);
+    }
+
+    function handleAnswer(selectedOpt, btnEl) {
+      clearInterval(qTimer);
+      const q = currentRoundQuestions[currentQIdx];
+      document.querySelectorAll('.idiom-opt-btn').forEach(b => b.disabled = true);
+      if (selectedOpt === q.answer) {
+        correctCount++; if (btnEl) btnEl.classList.add('correct');
+      } else {
+        if (btnEl) btnEl.classList.add('wrong');
+        document.querySelectorAll('.idiom-opt-btn').forEach(b => { if (b.textContent === q.answer) b.classList.add('correct'); });
+      }
+      setTimeout(() => { currentQIdx++; loadNextQuestion(); }, 900);
+    }
+
+    function settleIdiomRound() {
+      idiomQuizBox.style.display = 'none'; idiomLobbyBox.style.display = 'block';
+      let payout = 0, net = -5; const data = getIdiomDailyData(); let newStreak = data.streak;
+      if (correctCount <= 3) { payout = 0; net = -5; newStreak = 0; }
+      else if (correctCount <= 5) { payout = 5; net = 0; newStreak = 0; }
+      else if (correctCount <= 7) { payout = 8; net = 3; newStreak = 0; }
+      else if (correctCount <= 9) { payout = 10; net = 5; newStreak = 0; }
+      else if (correctCount === 10) { payout = 13; newStreak++; if (newStreak >= 2) payout += 2; net = payout - 5; }
+      try { localStorage.setItem('idiom_streak_perfect', newStreak.toString()); } catch (e) {}
+      idiomStreakBadge.textContent = `满分连胜: ${newStreak} 局 (每次额外+${newStreak >= 2 ? 2 : 0}分)`;
+      if (payout > 0) updatePoints(payout);
+      if (net > 0) {
+        idiomResultMsg.innerHTML = `🎉 答对 ${correctCount}/10 题！发放 ${payout} 积分，净赚 <span style="color:#f59e0b;">+${net}</span> 积分！`;
+        idiomResultMsg.style.color = '#15803d';
+        if (correctCount === 10 && typeof confetti === 'function') confetti({ particleCount: 110, spread: 80, origin: { y: 0.6 } });
+      } else if (net === 0) {
+        idiomResultMsg.textContent = `答对 ${correctCount}/10 题，发放 5 积分，保本不赚不赔！`; idiomResultMsg.style.color = 'var(--text-main)';
+      } else {
+        idiomResultMsg.textContent = `答对 ${correctCount}/10 题，未能回本，再接再厉！`; idiomResultMsg.style.color = '#dc2626';
+      }
+    }
   </script>
 </body>
 </html>
