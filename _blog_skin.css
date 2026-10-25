@@ -1,0 +1,595 @@
+    /* =====================================================================
+       博客外观改造（第 5 版）
+       1) 全屏暖色背景 + 主内容加宽
+       2) 窄幅吸顶标题栏（带织物纹理图案）
+       3) 右侧用户卡：头像 + 用户名 + 积分
+       4) 游戏厅全屏 + 小游戏深色舞台
+       5) 首页「游戏厅」拆成三档独立入口卡片
+       ===================================================================== */
+
+    /* ---------- 0. 全局色板：从冷绿改暖棕 ----------
+       这几个变量是整个博客的底色来源，改这里比逐个覆盖组件省事。
+       注意：行情交易终端自己有独立的 --bg / --text / --line 变量，
+       完全不受这里影响，所以终端配色不会被带偏。 */
+    :root {
+      --primary: #bf6a33;
+      --primary-hover: #8a4a20;
+      --text-main: #2f2419;
+      --text-muted: #7d6b5a;
+      --border-color: #ecdfd0;
+      --bg-color: #fffcf7;
+    }
+
+    /* ---------- 1. 页面底色：暖色渐变 + 细网格 ----------
+       用固定定位的伪元素当背景层，而不是 background-attachment: fixed，
+       后者在移动端不生效、滚动时还要重绘。 */
+    body {
+      display: block;
+      align-items: initial;
+      justify-content: initial;
+      min-height: 100vh;
+      padding: 0 0 60px;
+      background-color: #f7ecdf;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+      background-color: #f7ecdf;
+      background-image:
+        radial-gradient(1100px 560px at 4% -12%, rgba(230, 152, 88, 0.30), transparent 62%),
+        radial-gradient(940px 500px at 98% -4%, rgba(214, 124, 96, 0.22), transparent 58%),
+        radial-gradient(860px 640px at 50% 112%, rgba(236, 190, 124, 0.30), transparent 66%),
+        linear-gradient(to right, rgba(122, 74, 42, 0.05) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(122, 74, 42, 0.05) 1px, transparent 1px),
+        linear-gradient(180deg, #fdf4e7 0%, #fbead9 46%, #f8e7d6 100%);
+      background-size: auto, auto, auto, 46px 46px, 46px 46px, auto;
+      background-repeat: no-repeat, no-repeat, no-repeat, repeat, repeat, no-repeat;
+    }
+
+    /* ---------- 2. 主内容加宽 ----------
+       去掉原来的整块白色底板，让每个模块自己当卡片浮在背景上，
+       这样全屏背景才真的看得见，横向空间也用起来了。 */
+    .container {
+      width: calc(100% - 56px);
+      max-width: 1320px;
+      margin: 24px auto 0;
+      border: none;
+      border-radius: 0;
+      background: transparent;
+      box-shadow: none;
+      overflow: visible;
+    }
+
+    .content {
+      padding: 0 0 8px;
+    }
+
+    /* 浅色小卡片：在带色背景上要能立起来 */
+    .widget-card {
+      background: rgba(255, 252, 247, 0.94);
+      border-color: rgba(140, 92, 52, 0.13);
+      box-shadow: 0 12px 28px -22px rgba(90, 52, 24, 0.45);
+    }
+
+    .social-btn {
+      background-color: rgba(255, 252, 247, 0.92);
+      border-color: rgba(140, 92, 52, 0.13);
+    }
+
+    .social-bar {
+      margin-bottom: 16px;
+    }
+
+    /* ---------- 3. 窄幅吸顶标题栏（带图案） ----------
+       图案用三层叠出来，都是纯 CSS，不加载图片：
+       ① 45° 斜向细纹（织物感）② 反向更淡的斜纹（交叉成席纹）
+       ③ 左右两团暖光；右侧再压一层点阵，形成「从右往左淡出」的颗粒感。
+       都做得非常淡（透明度 0.03~0.05），放大才看得清，不抢文字。 */
+    .site-bar {
+      position: sticky;
+      top: 0;
+      z-index: 600;
+      overflow: hidden;
+      background-color: rgba(255, 249, 240, 0.9);
+      background-image:
+        repeating-linear-gradient(45deg, rgba(171, 112, 63, 0.05) 0 1px, transparent 1px 7px),
+        repeating-linear-gradient(-45deg, rgba(171, 112, 63, 0.032) 0 1px, transparent 1px 13px),
+        radial-gradient(560px 130px at 88% -25%, rgba(236, 178, 110, 0.36), transparent 72%),
+        radial-gradient(420px 120px at 4% 125%, rgba(214, 132, 104, 0.20), transparent 74%);
+      -webkit-backdrop-filter: saturate(170%) blur(14px);
+      backdrop-filter: saturate(170%) blur(14px);
+      border-bottom: 1px solid rgba(171, 112, 63, 0.16);
+      box-shadow: 0 10px 24px -22px rgba(90, 52, 24, 0.55);
+    }
+
+    /* 右侧点阵：渐隐，让头像那一侧有颗粒细节 */
+    .site-bar::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: min(46%, 620px);
+      height: 100%;
+      pointer-events: none;
+      background-image: radial-gradient(circle, rgba(171, 112, 63, 0.16) 0 1.2px, transparent 1.8px);
+      background-size: 14px 14px;
+      -webkit-mask-image: linear-gradient(90deg, transparent, #000 58%);
+      mask-image: linear-gradient(90deg, transparent, #000 58%);
+      opacity: 0.75;
+    }
+
+    /* 底部一条暖色渐变细线，收口用 */
+    .site-bar::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 2px;
+      pointer-events: none;
+      background: linear-gradient(90deg,
+        transparent 0%,
+        rgba(214, 146, 78, 0.5) 18%,
+        rgba(191, 106, 51, 0.72) 50%,
+        rgba(214, 146, 78, 0.5) 82%,
+        transparent 100%);
+      opacity: 0.8;
+    }
+
+    .site-bar-inner {
+      position: relative;
+      z-index: 1;
+      width: calc(100% - 56px);
+      max-width: 1320px;
+      margin: 0 auto;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+    }
+
+    .site-brand {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      min-width: 0;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .site-brand-mark {
+      flex: 0 0 auto;
+      width: 36px;
+      height: 36px;
+      border-radius: 11px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(150deg, #d98a4e 0%, #a8542a 100%);
+      color: #fff;
+      font-family: "Bricolage Grotesque", sans-serif;
+      font-size: 12.5px;
+      font-weight: 800;
+      letter-spacing: -0.4px;
+      box-shadow: 0 6px 14px -6px rgba(168, 84, 42, 0.72), inset 0 1px 0 rgba(255, 255, 255, 0.28);
+    }
+
+    .site-brand-text {
+      display: block;
+      min-width: 0;
+    }
+
+    .site-brand-name {
+      display: block;
+      font-family: "Bricolage Grotesque", sans-serif;
+      font-size: 17px;
+      font-weight: 700;
+      letter-spacing: -0.35px;
+      line-height: 1.15;
+      color: var(--text-main);
+    }
+
+    .site-brand-sub {
+      display: block;
+      margin-top: 2px;
+      font-size: 11.5px;
+      line-height: 1.2;
+      color: var(--text-muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* ---------- 4. 右侧用户卡：头像 + 用户名 + 积分 ---------- */
+    .user-points-badge {
+      flex: 0 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 5px 13px 5px 5px;
+      min-width: 0;
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: 999px;
+      color: var(--text-main);
+      box-shadow: 0 3px 10px -6px rgba(15, 23, 42, 0.4);
+      position: static;
+      top: auto;
+      align-self: center;
+    }
+
+    .user-points-badge .user-avatar {
+      width: 36px;
+      height: 36px;
+      border: 2px solid #ffffff;
+      box-shadow: 0 0 0 1px var(--border-color);
+      background-color: #f1f5f9;
+    }
+
+    .user-points-badge .avatar-dropdown-wrapper:hover .user-avatar {
+      border-color: #facc15;
+    }
+
+    .user-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      line-height: 1.1;
+      min-width: 0;
+    }
+
+    .user-name {
+      font-size: 12.5px;
+      font-weight: 700;
+      color: var(--text-main);
+      letter-spacing: -0.1px;
+      white-space: nowrap;
+    }
+
+    .user-points-badge .points-box {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      align-self: flex-start;
+      padding: 1px 8px 1px 5px;
+      border-radius: 999px;
+      background: rgba(191, 106, 51, 0.11);
+      color: var(--primary);
+      transition: background-color 0.2s ease;
+    }
+
+    .user-points-badge .points-box:hover {
+      background: rgba(191, 106, 51, 0.2);
+    }
+
+    .user-points-badge .points-icon {
+      font-size: 10px;
+      line-height: 1;
+    }
+
+    .user-points-badge .points-num {
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--primary);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .user-points-badge .points-unit {
+      font-size: 10px;
+      font-weight: 600;
+      color: rgba(191, 106, 51, 0.75);
+    }
+
+    /* ---------- 5. 游戏厅全屏 ---------- */
+    /* 浮层不再用纯白面板，而是铺满博客同款渐变背景，
+       这样全屏后不会出现「上面一堆内容、下面一大片空白」的白板感 */
+    .modal-overlay {
+      padding: 0;
+      background-color: #f8ecdd;
+      background-image:
+        radial-gradient(1100px 560px at 4% -12%, rgba(230, 152, 88, 0.26), transparent 62%),
+        radial-gradient(940px 500px at 98% -4%, rgba(214, 124, 96, 0.20), transparent 58%),
+        radial-gradient(860px 640px at 50% 112%, rgba(236, 190, 124, 0.26), transparent 66%),
+        linear-gradient(180deg, #fdf3e5 0%, #fbead9 46%, #f8e7d6 100%);
+    }
+
+    .modal-container {
+      width: 100%;
+      max-width: none;
+      height: 100%;
+      max-height: none;
+      border-radius: 0;
+      border: none;
+      padding: 18px 32px 24px;
+      background: transparent;
+      box-shadow: none;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .modal-container.game-playing {
+      height: 100%;
+      max-height: none;
+    }
+
+    .modal-header {
+      padding-bottom: 12px;
+    }
+
+    /* 内容块在垂直方向居中，稀疏的标签页也不会只剩上半屏 */
+    .modal-container > .game-grid {
+      align-content: center;
+    }
+
+    .modal-container > .game-stage-view,
+    #gameStageView {
+      justify-content: center;
+    }
+
+    /* 行情交易终端 / 体育博彩 两个「建设中」页：单张卡片也要落在视觉中部，
+       否则全屏后只剩顶部一条内容，下面全是空白。
+       脚本是用内联 display:block / none 切换的，所以只在「已显示」时接管外边距。 */
+    .modal-container > .coming-soon-panel {
+      width: 100%;
+      max-width: 1120px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .modal-container > .coming-soon-panel[style*="block"] {
+      margin-top: auto;
+      margin-bottom: auto;
+    }
+
+    /* 退出按钮：真正贴到屏幕右上角（不再被 1120px 内容宽度限制） */
+    #gameModal .modal-close-btn {
+      position: fixed;
+      top: 16px;
+      right: 20px;
+      z-index: 8;
+      flex: 0 0 auto;
+      width: 38px;
+      height: 38px;
+      display: grid;
+      place-items: center;
+      padding: 0;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid var(--border-color);
+      box-shadow: 0 8px 22px -14px rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(10px);
+      font-size: 20px;
+      line-height: 1;
+      color: var(--text-muted);
+      transition: background 0.18s ease, color 0.18s ease, transform 0.12s ease;
+    }
+
+    #gameModal .modal-close-btn:hover {
+      background: #fee2e2;
+      border-color: #fecaca;
+      color: #dc2626;
+      transform: rotate(90deg);
+    }
+
+    #gameModal .modal-container.game-playing .modal-close-btn {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(148, 163, 184, 0.3);
+      box-shadow: 0 10px 24px -14px rgba(0, 0, 0, 0.8);
+      color: #cbd5e1;
+    }
+
+    /* ---------- 6. 小游戏舞台：深色 ---------- */
+    .modal-container.game-playing {
+      --bg-color: #101a2c;
+      --card-bg: #16223a;
+      --text-main: #e9effb;
+      --text-muted: #94a4be;
+      --border-color: rgba(148, 163, 184, 0.22);
+      color: var(--text-main);
+      background-color: #0b1424;
+      background-image:
+        radial-gradient(900px 480px at 18% -12%, rgba(33, 146, 108, 0.26), transparent 62%),
+        radial-gradient(760px 420px at 92% 0%, rgba(59, 130, 246, 0.18), transparent 58%);
+      background-repeat: no-repeat;
+    }
+
+    .modal-container.game-playing .modal-header {
+      border-bottom-color: rgba(148, 163, 184, 0.18);
+    }
+
+    .modal-container.game-playing .modal-title {
+      color: var(--text-main);
+    }
+
+    .modal-container.game-playing .modal-points-tag,
+    .modal-container.game-playing .daily-limit-badge {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(148, 163, 184, 0.24);
+      color: var(--text-main);
+    }
+
+    .modal-container.game-playing .modal-close-btn {
+      background: rgba(255, 255, 255, 0.07);
+      border-color: rgba(148, 163, 184, 0.26);
+      color: #cbd5e1;
+    }
+
+    .modal-container.game-playing .modal-close-btn:hover {
+      background: rgba(220, 38, 38, 0.9);
+      border-color: rgba(220, 38, 38, 0.9);
+      color: #ffffff;
+    }
+
+    .modal-container.game-playing .game-stage-header {
+      border-bottom-color: rgba(148, 163, 184, 0.2);
+    }
+
+    .modal-container.game-playing .btn-back-lobby {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(148, 163, 184, 0.26);
+      color: var(--text-main);
+    }
+
+    .modal-container.game-playing .btn-back-lobby:hover {
+      background: rgba(255, 255, 255, 0.16);
+    }
+
+    /* 舞台里少数写死浅色的块（规则表、提示条等）跟着变深 */
+    .modal-container.game-playing .idiom-rule-table th {
+      background: rgba(255, 255, 255, 0.07);
+      color: var(--text-main);
+    }
+
+    .modal-container.game-playing .idiom-rule-table td {
+      border-color: rgba(148, 163, 184, 0.16);
+      color: var(--text-muted);
+    }
+
+    /* 深色舞台里，骰子 / 扑克 / 卷轴这类"实物"保持白色，不要被反色 */
+    .modal-container.game-playing .dice-cube,
+    .modal-container.game-playing .playing-card,
+    .modal-container.game-playing .slot-reel,
+    .modal-container.game-playing .wheel-center-pin {
+      color: #0f172a;
+    }
+
+    /* ---------- 7. 小屏收敛 ---------- */
+    @media (max-width: 900px) {
+      body {
+        padding: 0 0 40px;
+      }
+
+      .site-bar-inner,
+      .container {
+        width: calc(100% - 28px);
+      }
+
+      .site-bar-inner {
+        height: 58px;
+      }
+
+      .site-brand-sub {
+        display: none;
+      }
+
+      .site-brand-name {
+        font-size: 15.5px;
+      }
+
+      .container {
+        margin-top: 16px;
+        border-radius: 16px;
+      }
+
+      .content {
+        padding: 18px;
+      }
+
+      .modal-container {
+        padding: 14px 16px 18px;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .user-points-badge {
+        padding-right: 8px;
+        gap: 7px;
+      }
+
+      .user-name {
+        font-size: 11.5px;
+      }
+
+      .user-points-badge .user-avatar {
+        width: 30px;
+        height: 30px;
+      }
+
+      .site-brand-mark {
+        width: 32px;
+        height: 32px;
+        border-radius: 9px;
+        font-size: 11px;
+      }
+    }
+
+
+    /* ---------- 9. 照片模块：宽屏两列并排 ---------- */
+    .photo-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 20px;
+      margin-top: 4px;
+    }
+
+    .photo-grid .photo-card {
+      margin-bottom: 0;
+    }
+
+    .photo-grid .photo-wrapper {
+      height: 300px;
+    }
+
+    .photo-grid .photo-img {
+      object-position: center 32%;
+    }
+
+    @media (max-width: 900px) {
+      .photo-grid {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 16px;
+      }
+
+      .photo-grid .photo-wrapper {
+        height: 220px;
+      }
+    }
+
+    /* ---------- 10. 游戏厅全屏后的排版收敛 ----------
+       全屏后卡片被拉得太宽太散，这里把内容宽度收回到 1120，
+       卡片加高、图标放大，让大厅在整屏里显得是"一块板"而不是散落的格子。 */
+    .modal-header,
+    .game-grid,
+    .game-stage-view {
+      width: 100%;
+      max-width: 1120px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .game-grid {
+      margin-top: 18px;
+      gap: 20px;
+      align-content: center;
+    }
+
+    .game-item-card {
+      min-height: 200px;
+      padding: 22px 16px;
+    }
+
+    .game-item-icon {
+      font-size: 42px;
+    }
+
+    .game-item-name {
+      font-size: 15.5px;
+    }
+
+    .game-item-play-btn {
+      padding: 9px 14px;
+    }
+
+    /* 大厅卡片靠上排，别在整屏中间飘着 */
+    .game-grid {
+      align-content: start;
+      padding-top: 4px;
+    }
+
+    .game-grid .game-item-card {
+      min-height: 210px;
+    }
