@@ -50,18 +50,18 @@
 
     /* 顶部标题区：封面 Banner */
     .header {
-  background: linear-gradient(rgba(15, 23, 42, 0.2), rgba(15, 23, 42, 0.75)),
-              url("photo_2026-10-21_20-48-01.jpg");
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  color: #ffffff;
-  min-height: 300px;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  padding: 24px 28px 16px 28px;
-  text-align: left;
+      background: linear-gradient(rgba(15, 23, 42, 0.2), rgba(15, 23, 42, 0.75)),
+                  url("photo_2026-10-21_20-48-01.jpg");
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      color: #ffffff;
+      min-height: 300px; 
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 24px 28px 16px 28px;
+      text-align: left;
     }
 
     .header-title-row {
@@ -487,12 +487,12 @@
     .modal-container {
       background: var(--card-bg);
       width: 100%;
-      max-width: 680px;
+      max-width: 880px;
       border-radius: 16px;
       padding: 20px 24px;
       border: 1px solid var(--border-color);
       box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.25);
-      max-height: 90vh;
+      max-height: 120vh;
       overflow-y: auto;
       display: flex;
       flex-direction: column;
@@ -1450,8 +1450,8 @@
       transition: transform 0.6s ease;
     }
 
-.photo-card:hover .photo-img {
-  transform: scale(1.02); /* 鼠标移上去微动放大 2%，如果不想要任何放大可改为 scale(1) */
+    .photo-card:hover .photo-img {
+      transform: scale(1.03);
     }
 
     .photo-info {
