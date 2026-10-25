@@ -4174,6 +4174,7 @@
     </aside>
   </main>
 
+<<<<<<< HEAD
   <footer class="ticker" aria-label="行情播报">
     <div class="ticker-label">MOCK FEED</div>
     <div class="ticker-viewport">
@@ -4208,6 +4209,9 @@
       </div>
     </div>
   </footer>
+=======
+
+>>>>>>> 545db2a04c6d9ef96e9d03bf61fcdbc13a7f4efb
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
@@ -4564,6 +4568,7 @@
       toastTimer = setTimeout(() => toast.classList.remove('show'), 2400);
     }
 
+<<<<<<< HEAD
     // 单屏布局下无需滚动定位，用高亮脉冲提示下单面板
     function pulseOrderPanel() {
       const panel = document.querySelector('.order-panel');
@@ -4573,6 +4578,8 @@
       panel.classList.add('pulse');
     }
 
+=======
+>>>>>>> 545db2a04c6d9ef96e9d03bf61fcdbc13a7f4efb
     function sparkline(values, isUp, width = 100, height = 26) {
       const min = Math.min(...values);
       const max = Math.max(...values);
@@ -4588,6 +4595,85 @@
       </svg>`;
     }
 
+<<<<<<< HEAD
+=======
+    const INDEX_STRIP_IDS = ['000001.SH', '399001.SZ', '000300.SH', '399006.SZ'];
+
+    function renderIndexStrip() {
+      const strip = $('#marketStrip');
+      if (!strip) return;
+      strip.innerHTML = INDEX_STRIP_IDS.map((id) => {
+        const stock = findStock(id);
+        if (!stock) return '';
+        const pct = ((stock.price - stock.prev) / stock.prev) * 100;
+        const tone = upDown(pct);
+        return `
+          <div class="index-card">
+            <div class="index-top"><span>${stock.name}</span><span>${stock.code}</span></div>
+            <div class="index-value num">${fmt(stock.price, 2)}</div>
+            <div class="index-bottom">
+              <span class="index-change ${tone}">${signedPct(pct)}</span>
+              <span class="index-spark">${sparkline(stock.series, pct >= 0, 80, 24)}</span>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // 播报标的：约 50 只，按板块挑热门股（指数 / 科技 / 消费 / 金融 / 医药 / 资源 / 制造 / 新能源 / ETF / 美股）
+    const TICKER_IDS = [
+      // 指数
+      '000001.SH', '399001.SZ', '399006.SZ', '000688.SH',
+      // 科技 / AI / 半导体
+      '300308.SZ', '300502.SZ', '688256.SH', '688981.SH', '002371.SZ',
+      '601138.SH', '002475.SZ', '300033.SZ', '002230.SZ', '300059.SZ',
+      // 消费 / 白酒 / 家电
+      '600519.SH', '000858.SZ', '000568.SZ', '605499.SH', '000333.SZ', '601888.SH',
+      // 新能源车 / 光伏 / 锂电
+      '300750.SZ', '002594.SZ', '601127.SH', '300274.SZ', '601012.SH', '002460.SZ',
+      // 金融
+      '601318.SH', '600036.SH', '601398.SH', '600030.SH',
+      // 医药
+      '600276.SH', '300760.SZ', '603259.SH', '688235.SH',
+      // 资源 / 能源
+      '601899.SH', '601857.SH', '600900.SH', '600111.SH',
+      // 高端制造 / 军工
+      '600760.SH', '300124.SZ', '002747.SZ', '600031.SH', '688017.SH',
+      // ETF
+      '510300.SH', '588000.SH', '512760.SH', '515980.SH', '518880.SH',
+      // 美股
+      'AAPL.US', 'NVDA.US', 'TSLA.US', 'META.US', 'TSM.US'
+    ];
+
+    // 滚动速度：每秒移动多少像素（数值越小越慢）
+    const TICKER_SPEED = 38;
+
+    function renderTicker() {
+      const track = $('#tickerTrack');
+      if (!track) return;
+      const items = TICKER_IDS
+        .map((id) => findStock(id))
+        .filter(Boolean)
+        .map((stock) => {
+          const pct = ((stock.price - stock.prev) / stock.prev) * 100;
+          const tone = pct >= 0 ? 'up' : 'down';
+          return `<span class="ticker-item">${stock.name} <b>${stock.currency}${fmt(stock.price, stock.decimals)}</b> <i class="${tone}">${signedPct(pct)}</i></span><span class="ticker-dot"></span>`;
+        })
+        .join('');
+      track.innerHTML = items + items; // 复制一份，保证滚动无缝衔接
+
+      // 按实际宽度换算时长：不同屏幕下滚动速度保持一致（每秒 TICKER_SPEED 像素）
+      const syncDuration = () => {
+        const halfWidth = track.scrollWidth / 2;
+        if (halfWidth > 0) {
+          track.style.animationDuration = `${Math.round(halfWidth / TICKER_SPEED)}s`;
+        }
+      };
+      syncDuration();
+      requestAnimationFrame(syncDuration); // 首帧未排版完成时再兜底一次
+    }
+
+>>>>>>> 545db2a04c6d9ef96e9d03bf61fcdbc13a7f4efb
     function renderHoldings() {
       $('#holdingsList').innerHTML = HOLDINGS.map((holding) => {
         const stock = findStock(holding.id);
@@ -4708,11 +4794,32 @@
       updateOrderPanel();
 
       if (fromTrade) {
+<<<<<<< HEAD
         pulseOrderPanel();
+=======
+        document.querySelector('.order-panel').scrollIntoView({ behavior: 'smooth', block: 'center' });
+>>>>>>> 545db2a04c6d9ef96e9d03bf61fcdbc13a7f4efb
         showToast(`已把「${stock.name}」带入下单面板`);
       }
     }
 
+<<<<<<< HEAD
+=======
+    function syncCategoryCounts() {
+      const counts = { 全部: STOCKS.length };
+      STOCKS.forEach((stock) => {
+        counts[stock.category] = (counts[stock.category] || 0) + 1;
+      });
+      document.querySelectorAll('.watch-tab').forEach((button) => {
+        const badge = button.querySelector('small');
+        if (!badge) return;
+        badge.textContent = String(counts[button.dataset.category] || 0);
+      });
+      const watchCount = $('#watchCount');
+      if (watchCount) watchCount.textContent = `${STOCKS.length} 个标的`;
+    }
+
+>>>>>>> 545db2a04c6d9ef96e9d03bf61fcdbc13a7f4efb
     function filteredStocks() {
       const query = state.search.trim().toLowerCase();
       return STOCKS.filter((stock) => {
@@ -4756,7 +4863,11 @@
         `;
       }).join('');
 
+<<<<<<< HEAD
       $('#tableCount').textContent = `显示 ${stocks.length} 个标的 · 演示快照 10/23`;
+=======
+      $('#tableCount').textContent = `显示 ${stocks.length} / ${STOCKS.length} 个标的 · 快照 10/23`;
+>>>>>>> 545db2a04c6d9ef96e9d03bf61fcdbc13a7f4efb
 
       document.querySelectorAll('#marketRows tr').forEach((row) => {
         row.addEventListener('click', (event) => {
@@ -4927,13 +5038,21 @@
 
     $('#quickBuyBtn').addEventListener('click', () => {
       setSide('buy');
+<<<<<<< HEAD
       pulseOrderPanel();
+=======
+      document.querySelector('.order-panel').scrollIntoView({ behavior: 'smooth', block: 'center' });
+>>>>>>> 545db2a04c6d9ef96e9d03bf61fcdbc13a7f4efb
       showToast('已切换到买入下单');
     });
 
     $('#quickSellBtn').addEventListener('click', () => {
       setSide('sell');
+<<<<<<< HEAD
       pulseOrderPanel();
+=======
+      document.querySelector('.order-panel').scrollIntoView({ behavior: 'smooth', block: 'center' });
+>>>>>>> 545db2a04c6d9ef96e9d03bf61fcdbc13a7f4efb
       showToast('已切换到卖出下单');
     });
 
@@ -4988,6 +5107,12 @@
     }
     setInterval(updateRefreshCountdown, 1000);
 
+<<<<<<< HEAD
+=======
+    syncCategoryCounts();
+    renderIndexStrip();
+    renderTicker();
+>>>>>>> 545db2a04c6d9ef96e9d03bf61fcdbc13a7f4efb
     renderHoldings();
     renderTable();
     updateOrderPanel();
