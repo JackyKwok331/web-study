@@ -12,12 +12,12 @@
        注意：行情交易终端自己有独立的 --bg / --text / --line 变量，
        完全不受这里影响，所以终端配色不会被带偏。 */
     :root {
-      --primary: #bf6a33;
-      --primary-hover: #8a4a20;
-      --text-main: #2f2419;
-      --text-muted: #7d6b5a;
-      --border-color: #ecdfd0;
-      --bg-color: #fffcf7;
+      --primary: #b85f2d;
+      --primary-hover: #8a3f18;
+      --text-main: #33251a;
+      --text-muted: #866b55;
+      --border-color: #ecd9c6;
+      --bg-color: #fffaf3;
     }
 
     /* ---------- 1. 页面底色：暖色渐变 + 细网格 ----------
@@ -29,7 +29,7 @@
       justify-content: initial;
       min-height: 100vh;
       padding: 0 0 60px;
-      background-color: #f7ecdf;
+      background-color: #f5e2cd;
     }
 
     body::before {
@@ -38,14 +38,14 @@
       inset: 0;
       z-index: -1;
       pointer-events: none;
-      background-color: #f7ecdf;
+      background-color: #f5e2cd;
       background-image:
-        radial-gradient(1100px 560px at 4% -12%, rgba(230, 152, 88, 0.30), transparent 62%),
-        radial-gradient(940px 500px at 98% -4%, rgba(214, 124, 96, 0.22), transparent 58%),
-        radial-gradient(860px 640px at 50% 112%, rgba(236, 190, 124, 0.30), transparent 66%),
-        linear-gradient(to right, rgba(122, 74, 42, 0.05) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(122, 74, 42, 0.05) 1px, transparent 1px),
-        linear-gradient(180deg, #fdf4e7 0%, #fbead9 46%, #f8e7d6 100%);
+        radial-gradient(1100px 560px at 2% -14%, rgba(228, 138, 74, 0.42), transparent 62%),
+        radial-gradient(900px 480px at 100% -6%, rgba(198, 102, 72, 0.26), transparent 58%),
+        radial-gradient(900px 660px at 50% 114%, rgba(240, 186, 112, 0.40), transparent 66%),
+        linear-gradient(to right, rgba(146, 94, 55, 0.055) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(146, 94, 55, 0.055) 1px, transparent 1px),
+        linear-gradient(160deg, #fdf1e0 0%, #fbe6cf 44%, #f7dcc2 100%);
       background-size: auto, auto, auto, 46px 46px, 46px 46px, auto;
       background-repeat: no-repeat, no-repeat, no-repeat, repeat, repeat, no-repeat;
     }
@@ -85,24 +85,28 @@
     }
 
     /* ---------- 3. 窄幅吸顶标题栏（带图案） ----------
-       图案用三层叠出来，都是纯 CSS，不加载图片：
-       ① 45° 斜向细纹（织物感）② 反向更淡的斜纹（交叉成席纹）
-       ③ 左右两团暖光；右侧再压一层点阵，形成「从右往左淡出」的颗粒感。
-       都做得非常淡（透明度 0.03~0.05），放大才看得清，不抢文字。 */
+       图案用四层叠出来，都是纯 CSS / 内联 SVG，不加载图片：
+       ① 手绘小图案（圆环、星星、爱心、加号）——最直观的一层，肉眼可见
+       ② 45° 斜向细纹（织物感）③ 反向更淡的斜纹（交叉成席纹）
+       ④ 左右两团暖光；右侧再压一层点阵，形成「从右往左淡出」的颗粒感。
+       小图案透明度压在 0.10 左右：看得见图案，但不会盖过文字。 */
     .site-bar {
       position: sticky;
       top: 0;
       z-index: 600;
       overflow: hidden;
-      background-color: rgba(255, 249, 240, 0.9);
+      background-color: rgba(255, 247, 236, 0.94);
       background-image:
-        repeating-linear-gradient(45deg, rgba(171, 112, 63, 0.05) 0 1px, transparent 1px 7px),
-        repeating-linear-gradient(-45deg, rgba(171, 112, 63, 0.032) 0 1px, transparent 1px 13px),
-        radial-gradient(560px 130px at 88% -25%, rgba(236, 178, 110, 0.36), transparent 72%),
-        radial-gradient(420px 120px at 4% 125%, rgba(214, 132, 104, 0.20), transparent 74%);
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='132' height='132' viewBox='0 0 132 132'%3E%3Cg fill='none' stroke='%23b06634' stroke-width='1.5' opacity='.21'%3E%3Ccircle cx='22' cy='24' r='6'/%3E%3Cpath d='M74 14l6 12 12 6-12 6-6 12-6-12-12-6 12-6z'/%3E%3Cpath d='M19 94c6-11 19-11 25 0 4 8-4 20-12.5 20S15 102 19 94z'/%3E%3Ccircle cx='104' cy='104' r='4.5'/%3E%3Cpath d='M61 84h20M71 74v20'/%3E%3Ccircle cx='113' cy='47' r='2.4' fill='%23b06634' stroke='none'/%3E%3Ccircle cx='45' cy='57' r='2' fill='%23b06634' stroke='none'/%3E%3C/g%3E%3C/svg%3E"),
+        repeating-linear-gradient(45deg, rgba(171, 112, 63, 0.055) 0 1px, transparent 1px 7px),
+        repeating-linear-gradient(-45deg, rgba(171, 112, 63, 0.035) 0 1px, transparent 1px 13px),
+        radial-gradient(560px 130px at 88% -25%, rgba(236, 178, 110, 0.42), transparent 72%),
+        radial-gradient(420px 120px at 4% 125%, rgba(214, 132, 104, 0.24), transparent 74%);
+      background-size: 132px 132px, auto, auto, auto, auto;
+      background-repeat: repeat, no-repeat, no-repeat, no-repeat, no-repeat;
       -webkit-backdrop-filter: saturate(170%) blur(14px);
       backdrop-filter: saturate(170%) blur(14px);
-      border-bottom: 1px solid rgba(171, 112, 63, 0.16);
+      border-bottom: 1px solid rgba(171, 112, 63, 0.18);
       box-shadow: 0 10px 24px -22px rgba(90, 52, 24, 0.55);
     }
 
@@ -592,4 +596,587 @@
 
     .game-grid .game-item-card {
       min-height: 210px;
+    }
+
+    /* ---------- 11. 首页「游戏厅」三档独立入口 ----------
+       三张卡片共用一套骨架，只靠 --accent 换主色：
+       经典娱乐＝陶土橙、行情终端＝墨绿、体育竞猜＝靛蓝。
+       卡面沿用大厅的奶油色底，保证和现有游戏模块是同一套语言。 */
+    .play-section {
+      margin: 26px 0 24px;
+    }
+
+    .play-head {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 16px;
+      margin: 0 4px 14px;
+    }
+
+    .play-title {
+      font-family: "Bricolage Grotesque", sans-serif;
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: -0.3px;
+      color: var(--text-main);
+    }
+
+    .play-sub {
+      margin-top: 4px;
+      font-size: 12.5px;
+      color: var(--text-muted);
+    }
+
+    .play-note {
+      flex: 0 0 auto;
+      padding: 5px 11px;
+      border-radius: 999px;
+      border: 1px solid rgba(140, 92, 52, 0.16);
+      background: rgba(255, 250, 243, 0.82);
+      font-size: 11.5px;
+      font-weight: 600;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    .play-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .play-card {
+      --accent: #2f7a63;
+      --accent-deep: #1f5545;
+      --accent-soft: rgba(47, 122, 99, 0.12);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      min-height: 296px;
+      padding: 20px 20px 18px;
+      border-radius: 20px;
+      border: 1px solid rgba(140, 92, 52, 0.16);
+      background:
+        linear-gradient(165deg, rgba(255, 251, 245, 0.98) 0%, rgba(253, 240, 226, 0.96) 62%, rgba(250, 231, 211, 0.94) 100%);
+      box-shadow:
+        0 18px 36px -30px rgba(90, 52, 24, 0.62),
+        inset 0 1px 0 rgba(255, 255, 255, 0.9);
+      transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+    }
+
+    .play-card::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--accent), transparent 78%);
+      opacity: 0.85;
+    }
+
+    .play-card::after {
+      content: "";
+      position: absolute;
+      top: -70px;
+      right: -60px;
+      width: 210px;
+      height: 210px;
+      border-radius: 50%;
+      background: radial-gradient(circle, var(--accent-soft), transparent 68%);
+      pointer-events: none;
+    }
+
+    .play-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(140, 92, 52, 0.28);
+      box-shadow:
+        0 26px 46px -30px rgba(90, 52, 24, 0.55),
+        inset 0 1px 0 rgba(255, 255, 255, 0.9);
+    }
+
+    .play-card-arcade {
+      --accent: #2f7a63;
+      --accent-deep: #1f5545;
+      --accent-soft: rgba(47, 122, 99, 0.13);
+    }
+
+    .play-card-terminal {
+      --accent: #2f7a63;
+      --accent-deep: #1f5545;
+      --accent-soft: rgba(47, 122, 99, 0.13);
+    }
+
+    .play-card-sports {
+      --accent: #2f7a63;
+      --accent-deep: #1f5545;
+      --accent-soft: rgba(47, 122, 99, 0.13);
+    }
+
+    .play-watermark {
+      position: absolute;
+      right: -4px;
+      bottom: -22px;
+      font-size: 106px;
+      line-height: 1;
+      opacity: 0.09;
+      transform: rotate(-8deg);
+      pointer-events: none;
+      user-select: none;
+      transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+
+    .play-card:hover .play-watermark {
+      transform: rotate(-3deg) scale(1.06);
+      opacity: 0.13;
+    }
+
+    .play-card-head {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .play-icon {
+      flex: 0 0 auto;
+      width: 44px;
+      height: 44px;
+      display: grid;
+      place-items: center;
+      font-size: 22px;
+      border-radius: 13px;
+      background: var(--accent-soft);
+      border: 1px solid rgba(140, 92, 52, 0.08);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7);
+    }
+
+    .play-tag {
+      padding: 4px 9px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      border: 1px solid rgba(140, 92, 52, 0.1);
+      font-size: 10.5px;
+      font-weight: 700;
+      letter-spacing: 0.2px;
+      color: var(--accent);
+      white-space: nowrap;
+    }
+
+    .play-name {
+      position: relative;
+      z-index: 1;
+      font-family: "Bricolage Grotesque", sans-serif;
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: -0.35px;
+      color: var(--text-main);
+    }
+
+    .play-desc {
+      position: relative;
+      z-index: 1;
+      margin-top: 7px;
+      font-size: 13px;
+      line-height: 1.65;
+      color: var(--text-muted);
+    }
+
+    .play-points {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin: 12px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .play-points li {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 4px 9px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.62);
+      border: 1px solid rgba(140, 92, 52, 0.1);
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    .play-points li::before {
+      content: "";
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--accent);
+      opacity: 0.75;
+    }
+
+    /* 按钮本体：button 和 a 共用，保证两种标签长得一样。
+       margin-top:auto 把按钮推到卡片底部，三张卡即使文案长短不一也对齐。 */
+    .play-cta,
+    a.play-cta {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      height: 44px;
+      margin-top: auto;
+      border: none;
+      border-radius: 12px;
+      background: var(--accent);
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent-deep) 100%);
+      color: #fffaf4;
+      font-family: inherit;
+      font-size: 13.5px;
+      font-weight: 700;
+      letter-spacing: 0.2px;
+      text-decoration: none;
+      cursor: pointer;
+      box-shadow: 0 12px 22px -14px var(--accent), inset 0 1px 0 rgba(255, 255, 255, 0.22);
+      transition: transform 0.16s ease, box-shadow 0.16s ease, filter 0.16s ease;
+    }
+
+    .play-points {
+      margin-bottom: 18px;
+    }
+
+    .play-cta:hover {
+      filter: brightness(1.05);
+      transform: translateY(-1px);
+      box-shadow: 0 16px 28px -14px var(--accent), inset 0 1px 0 rgba(255, 255, 255, 0.28);
+    }
+
+    .play-cta:active {
+      transform: translateY(0);
+    }
+
+    .play-cta:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 3px;
+    }
+
+    .play-cta-arrow {
+      transition: transform 0.16s ease;
+    }
+
+    .play-cta:hover .play-cta-arrow {
+      transform: translateX(3px);
+    }
+
+    @media (max-width: 1024px) {
+      .play-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .play-card:last-child {
+        grid-column: span 2;
+        min-height: 250px;
+      }
+    }
+
+    @media (max-width: 680px) {
+      .play-head {
+        align-items: flex-start;
+      }
+
+      .play-note {
+        display: none;
+      }
+
+      .play-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      .play-card,
+      .play-card:last-child {
+        grid-column: auto;
+        min-height: 0;
+      }
+
+      .play-watermark {
+        font-size: 88px;
+      }
+    }
+
+
+    /* ---------- 12. 顶栏头像框重设计 ----------
+       默认头像换成暖色小房子 + 爱心，外圈用渐变描边代替白描边；
+       头像本身改成圆角方形，和整页的暖色卡片语言一致。 */
+    .user-points-badge {
+      padding: 4px 14px 4px 4px;
+      background: rgba(255, 250, 243, 0.78);
+      border-color: rgba(184, 95, 45, 0.2);
+      box-shadow:
+        0 6px 18px -14px rgba(90, 52, 24, 0.55),
+        inset 0 1px 0 rgba(255, 255, 255, 0.95);
+      -webkit-backdrop-filter: blur(8px);
+      backdrop-filter: blur(8px);
+    }
+
+    .user-points-badge .avatar-dropdown-wrapper {
+      padding: 3px;
+      border-radius: 15px;
+      background: conic-gradient(from 210deg, #f8ddb8, #d99356, #b85f2d, #8f4419, #d99356, #f8ddb8);
+      box-shadow:
+        0 7px 16px -9px rgba(122, 64, 27, 0.75),
+        inset 0 1px 0 rgba(255, 255, 255, 0.55);
+      transition: box-shadow 0.2s ease, filter 0.2s ease;
+    }
+
+    .user-points-badge .avatar-dropdown-wrapper::after {
+      content: "";
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #3fae7a;
+      border: 2px solid #fffaf3;
+      box-shadow: 0 0 0 2px rgba(63, 174, 122, 0.16);
+      pointer-events: none;
+    }
+
+    .user-points-badge .user-avatar {
+      width: 38px;
+      height: 38px;
+      border-radius: 11px;
+      border: 2px solid #fff9f2;
+      box-shadow: 0 2px 7px rgba(70, 35, 12, 0.24);
+      background-color: #f8ddb8;
+    }
+
+    .user-points-badge .avatar-dropdown-wrapper:hover {
+      filter: brightness(1.04);
+      box-shadow:
+        0 9px 20px -9px rgba(122, 64, 27, 0.82),
+        0 0 0 3px rgba(217, 147, 86, 0.16),
+        inset 0 1px 0 rgba(255, 255, 255, 0.6);
+    }
+
+    .user-points-badge .avatar-dropdown-wrapper:hover .user-avatar {
+      border-color: #fffdf9;
+      transform: none;
+    }
+
+    @media (max-width: 560px) {
+      .user-points-badge .avatar-dropdown-wrapper {
+        padding: 2px;
+        border-radius: 12px;
+      }
+
+      .user-points-badge .user-avatar {
+        width: 30px;
+        height: 30px;
+        border-radius: 9px;
+      }
+
+      .user-points-badge .avatar-dropdown-wrapper::after {
+        width: 8px;
+        height: 8px;
+        border-width: 1.5px;
+      }
+    }
+
+    /* ---------- 13. 游戏厅：与行情终端统一的墨绿配色 ----------
+       只改大厅与游戏舞台的配色，不改游戏规则与布局；
+       小游戏内部仍沿用各自的按钮颜色。 */
+    #gameModal.modal-overlay {
+      background-color: #07110d;
+      background-image:
+        radial-gradient(900px 480px at 18% -12%, rgba(52, 211, 153, 0.18), transparent 62%),
+        radial-gradient(760px 420px at 92% 0%, rgba(245, 196, 81, 0.08), transparent 58%),
+        radial-gradient(700px 500px at 50% 118%, rgba(47, 122, 99, 0.2), transparent 68%),
+        linear-gradient(180deg, #081711 0%, #07110d 100%);
+    }
+
+    #gameModal .modal-container:not(.game-playing) {
+      --bg-color: rgba(255, 255, 255, 0.04);
+      --card-bg: #0e271f;
+      --text-main: #eef8f2;
+      --text-muted: #8aa79b;
+      --border-color: rgba(110, 231, 183, 0.18);
+      --primary: #34d399;
+      --primary-hover: #6ee7b7;
+      color: var(--text-main);
+    }
+
+    #gameModal .modal-header {
+      border-bottom-color: rgba(110, 231, 183, 0.18);
+    }
+
+    #gameModal .modal-title {
+      color: #f2f8f4;
+    }
+
+    #gameModal .modal-points-tag {
+      color: #eef8f2;
+      background: rgba(255, 255, 255, 0.04);
+      border-color: rgba(110, 231, 183, 0.2);
+    }
+
+    #gameModal .daily-limit-badge {
+      color: #f5c451;
+      background: rgba(245, 196, 81, 0.1);
+      border: 1px solid rgba(245, 196, 81, 0.22);
+    }
+
+    #gameModal .game-item-card {
+      background:
+        radial-gradient(120% 120% at 100% 0%, rgba(52, 211, 153, 0.07), transparent 56%),
+        linear-gradient(180deg, rgba(16, 44, 35, 0.92), rgba(9, 25, 19, 0.94));
+      border-color: rgba(110, 231, 183, 0.16);
+      box-shadow: 0 16px 30px -26px rgba(0, 0, 0, 0.95);
+    }
+
+    #gameModal .game-item-card:hover {
+      border-color: rgba(110, 231, 183, 0.46);
+      box-shadow:
+        0 22px 38px -26px rgba(0, 0, 0, 0.98),
+        0 0 0 1px rgba(110, 231, 183, 0.08);
+    }
+
+    #gameModal .game-item-name {
+      color: #f2f8f4;
+    }
+
+    #gameModal .game-item-cost {
+      color: #6ee7b7;
+    }
+
+    #gameModal .game-item-play-btn {
+      background: linear-gradient(135deg, #7ff0c4 0%, #34d399 60%, #1f9d74 100%);
+      color: #06130e;
+      box-shadow: 0 12px 22px -14px rgba(52, 211, 153, 0.8);
+    }
+
+    #gameModal .game-item-play-btn:hover {
+      background: linear-gradient(135deg, #a7f7d8 0%, #5ee7b5 60%, #2bb185 100%);
+    }
+
+    #gameModal .game-item-play-btn.btn-pending {
+      background: #365347;
+      color: #cfe8dc;
+    }
+
+    #gameModal .game-item-play-btn.btn-pending:hover {
+      background: #46695a;
+    }
+
+    #gameModal .modal-close-btn {
+      color: #9fb8ad;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(110, 231, 183, 0.18);
+      border-radius: 50%;
+      width: 38px;
+      height: 38px;
+      display: grid;
+      place-items: center;
+      font-size: 20px;
+      line-height: 1;
+      padding: 0;
+      -webkit-backdrop-filter: blur(10px);
+      backdrop-filter: blur(10px);
+    }
+
+    #gameModal .modal-close-btn:hover {
+      color: #6ee7b7;
+      background: rgba(110, 231, 183, 0.1);
+    }
+
+    #gameModal .modal-container.game-playing {
+      background-color: #07110d;
+      background-image:
+        radial-gradient(900px 480px at 18% -12%, rgba(52, 211, 153, 0.2), transparent 62%),
+        radial-gradient(760px 420px at 92% 0%, rgba(245, 196, 81, 0.08), transparent 58%);
+    }
+
+    /* ---------- 14. 左上角返回 / 体育竞猜浮层 / 头像换图 ---------- */
+    #gameModal .modal-close-btn {
+      left: 20px;
+      right: auto;
+      top: 16px;
+      font-size: 19px;
+      font-weight: 700;
+      transition: background 0.18s ease, color 0.18s ease, transform 0.12s ease;
+    }
+
+    #gameModal .modal-close-btn:hover {
+      transform: translateX(-2px);
+    }
+
+    .sports-layer {
+      position: fixed;
+      inset: 0;
+      z-index: 9500;
+      display: none;
+      background: #06110f;
+    }
+
+    .sports-layer.active {
+      display: block;
+    }
+
+    .sports-layer iframe {
+      display: block;
+      width: 100%;
+      height: 100%;
+      border: 0;
+      background: #06110f;
+    }
+
+    body.sports-open {
+      overflow: hidden;
+    }
+
+    .user-points-badge .avatar-dropdown-wrapper {
+      position: relative;
+    }
+
+    .avatar-camera {
+      position: absolute;
+      left: -4px;
+      bottom: -4px;
+      z-index: 3;
+      width: 19px;
+      height: 19px;
+      display: grid;
+      place-items: center;
+      padding: 0;
+      border-radius: 50%;
+      border: 2px solid #fffaf3;
+      background: linear-gradient(135deg, #f3c987, #b85f2d);
+      color: #fffaf3;
+      font-size: 8px;
+      line-height: 1;
+      cursor: pointer;
+      box-shadow: 0 3px 8px -4px rgba(90, 52, 24, 0.8);
+      transition: transform 0.15s ease, filter 0.15s ease;
+    }
+
+    .avatar-camera:hover {
+      transform: translateY(-1px);
+      filter: brightness(1.08);
+    }
+
+    @media (max-width: 560px) {
+      .avatar-camera {
+        width: 16px;
+        height: 16px;
+        font-size: 7px;
+        border-width: 1.5px;
+      }
+    }
+
+    /* 头像菜单会向下弹出，不能被吸顶栏裁掉 */
+    .site-bar {
+      overflow: visible;
     }
